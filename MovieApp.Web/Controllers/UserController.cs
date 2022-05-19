@@ -50,7 +50,7 @@ namespace MovieApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string _userName)
+        public IActionResult Login()
         {
 
             return View();
