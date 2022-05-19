@@ -1,4 +1,4 @@
-﻿@model UserModel
+﻿@model LogInModel
 
 <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -10,18 +10,20 @@
 
                             <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Giriş Yap</p>
 
-                            <form class="mx-1 mx-md-4" asp-controller="User" asp-action="CreateUser" method="post" novalidate>
+                            <form class="mx-1 mx-md-4" asp-controller="Account" asp-action="login" method="post" novalidate>
                                 <div asp-validation-summary="All"></div>
+
+                                <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl"/>
 
                                 <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">
-                                        <label asp-for="Email" class="form-label" for="form3Example3c">Email</label>
-                                        <input asp-for="Email" type="email" id="form3Example3c" class="form-control" />
-                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                        <label asp-for="UserName" class="form-label" for="form3Example3c">Kullanıcı Adı</label>
+                                        <input asp-for="UserName" type="email" id="form3Example3c" class="form-control" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
-
+                                
                                 <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">

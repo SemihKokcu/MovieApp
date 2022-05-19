@@ -27,9 +27,11 @@ namespace MovieApp.Web
             services.AddMvc();
             services.AddDbContext<MovieContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
-           
+            services.ConfigureApplicationCookie(opt => opt.LoginPath = "Account/Login");
+            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+                                                options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
 
-            
+
             services.AddControllersWithViews()
                 .AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled=true);
         }
@@ -47,6 +49,7 @@ namespace MovieApp.Web
             app.UseRouting();
             app.UseStatusCodePages();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

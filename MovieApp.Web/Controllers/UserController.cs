@@ -41,20 +41,10 @@ namespace MovieApp.Web.Controllers
                 
             }
             
-            return RedirectToAction("LoginUser");
+            return RedirectToAction("Login","account");
         }
 
-        public IActionResult LoginUser()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Login()
-        {
-
-            return View();
-        }
+       
 
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyUserName(string UserName)
