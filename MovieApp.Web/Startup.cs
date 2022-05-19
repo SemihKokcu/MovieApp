@@ -28,8 +28,7 @@ namespace MovieApp.Web
             services.AddDbContext<MovieContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
             services.ConfigureApplicationCookie(opt => opt.LoginPath = "Account/Login");
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
-                                                options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
+            
 
 
             services.AddControllersWithViews()
