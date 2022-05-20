@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Web.Models
 {
-    public class UserModel
+    public class RegisterModel
     {
         public int UserId { get; set; }
 
@@ -35,8 +35,6 @@ namespace MovieApp.Web.Models
         [Compare(nameof(Password))]
         public string RePassword { get; set; }
 
-        [Url]
-        public string Url { get; set; }
 
         //[Range(1900,2010)]
         //public int BirthYear { get; set; }

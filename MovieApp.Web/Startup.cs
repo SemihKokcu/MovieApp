@@ -29,6 +29,8 @@ namespace MovieApp.Web
             services.AddDbContext<MovieContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
             //services.ConfigureApplicationCookie(opt => opt.LoginPath = "Account/Login");
+            services.AddDbContext<AppIdentityDbContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
 
             services.AddIdentity<AppIdentityUser, AppIdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
@@ -53,9 +55,9 @@ namespace MovieApp.Web
 
             services.ConfigureApplicationCookie(options => {
 
-                options.LoginPath = "Account/Login";
-                options.LogoutPath = "Account/Logout";
-                options.AccessDeniedPath = "Account/AccessDenied";
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true; // sistem yeniden girme kapalı
                 options.Cookie = new CookieBuilder
                 {
