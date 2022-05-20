@@ -36,41 +36,41 @@ namespace MovieApp.Web
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<IdentityOptions>(options => {
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
+            //services.Configure<IdentityOptions>(options => {
+            //    options.Password.RequireDigit = true;
+            //    options.Password.RequireLowercase = true;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequireNonAlphanumeric = true;
+            //    options.Password.RequireUppercase = true;
 
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.AllowedForNewUsers = true;
+            //    options.Lockout.MaxFailedAccessAttempts = 5;
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Lockout.AllowedForNewUsers = true;
 
-                options.User.RequireUniqueEmail = true;
+            //    options.User.RequireUniqueEmail = true;
 
-                options.SignIn.RequireConfirmedEmail = true;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
-            });
+            //    options.SignIn.RequireConfirmedEmail = true;
+            //    options.SignIn.RequireConfirmedPhoneNumber = false;
+            //});
 
-            services.ConfigureApplicationCookie(options => {
+            //services.ConfigureApplicationCookie(options => {
 
-                options.LoginPath = "/Account/Login";
-                options.LogoutPath = "/Account/Logout";
-                options.AccessDeniedPath = "/Account/AccessDenied";
-                options.SlidingExpiration = true; // sistem yeniden girme kapalı
-                options.Cookie = new CookieBuilder
-                {
-                    HttpOnly = true,
-                    Name = ".AspNetCoreDemo.Access.Cookie",
-                    Path = "/",
-                    SameSite = SameSiteMode.Lax,
-                    SecurePolicy = CookieSecurePolicy.SameAsRequest
-                };
+            //    options.LoginPath = "/Account/Login";
+            //    options.LogoutPath = "/Account/Logout";
+            //    options.AccessDeniedPath = "/Account/AccessDenied";
+            //    options.SlidingExpiration = true; // sistem yeniden girme kapalı
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        HttpOnly = true,
+            //        Name = ".AspNetCoreDemo.Access.Cookie",
+            //        Path = "/",
+            //        SameSite = SameSiteMode.Lax,
+            //        SecurePolicy = CookieSecurePolicy.SameAsRequest
+            //    };
 
                     
 
-            });
+            //});
 
             services.AddControllersWithViews()
                 .AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled=true);

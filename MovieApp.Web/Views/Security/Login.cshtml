@@ -10,7 +10,7 @@
 
                             <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Giriş Yap</p>
 
-                            <form class="mx-1 mx-md-4" asp-controller="Account" asp-action="login" method="post" novalidate>
+                            <form class="mx-1 mx-md-4" asp-controller="Security" asp-action="Login" method="post" novalidate>
                                 <div asp-validation-summary="All"></div>
 
                                 <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl"/>
@@ -40,7 +40,7 @@
                                 <p class="small mb-5 pb-lg-2"><a class="text-dark-50" href="#!">Şifremi unuttum</a></p>
                                 <div>
                                     <p class="mb-0">
-                                        Bir hesabın yok mu ? <a href="/user/createuser" class="text-dark-50 fw-bold">Kayıt ol</a>
+                                        Bir hesabın yok mu ? <a href="/security/register" class="text-dark-50 fw-bold">Kayıt ol</a>
                                     </p>
                                 </div>
                             </form>

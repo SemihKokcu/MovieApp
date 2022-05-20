@@ -1,27 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using MovieApp.Web.Data;
 using MovieApp.Web.Identity;
 using MovieApp.Web.Models;
 using MovieApp.Web.Models.Account;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MovieApp.Web.Controllers
 {
-  
-    public class AccountController : Controller
+
+    public class SecurityController : Controller
     {
 
         private UserManager<AppIdentityUser> _userManager;
 
         private SignInManager<AppIdentityUser> _signInManager;
 
-        public AccountController(UserManager<AppIdentityUser> userManager, SignInManager<AppIdentityUser> signInManager)
+        public SecurityController(UserManager<AppIdentityUser> userManager, SignInManager<AppIdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -97,17 +92,17 @@ namespace MovieApp.Web.Controllers
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                Name = model.Name,
-                BirthDate = model.BirthDate,
+               
                 
             };
 
             var result = await _userManager.CreateAsync(user,model.Password);
+           
             if (result.Succeeded)
             {
                 var confirmationCode = _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                var callBackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = confirmationCode });
+                var callBackUrl = Url.Action("ConfirmEmail", "Security", new { userId = user.Id, code = confirmationCode.Result });
 
                 //Send Email
 
@@ -164,7 +159,7 @@ namespace MovieApp.Web.Controllers
 
             var confirmationCode = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = confirmationCode });
+            var callbackUrl = Url.Action("ResetPassword", "Security", new { userId = user.Id, code = confirmationCode });
 
             //send callbackurlwithemail
 

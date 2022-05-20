@@ -11,8 +11,8 @@
 
                             <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Kayıt ol</p>
 
-                            <form class="mx-1 mx-md-4" asp-controller="Account" asp-action="Register" method="post">
-                                @*<div asp-validation-summary="All"></div>*@
+                            <form class="mx-1 mx-md-4" asp-controller="Security" asp-action="Register" method="post" novalidate>
+                                <div asp-validation-summary="All"></div>
                                 <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">
@@ -21,14 +21,14 @@
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mb-4">
+                                @*<div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">
                                         <label asp-for="Name" class="form-label" for="form3Example1c">İsim</label>
                                         <input asp-for="Name" type="text" id="form3Example1c" class="form-control" />
                                         <span asp-validation-for="Name" class="text-danger"></span>
                                     </div>
-                                </div>
+                                </div>*@
 
                                 <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -57,24 +57,24 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex flex-row align-items-center mb-4">
+                                @*<div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">
                                         <label asp-for="BirthDate" class="form-label" for="form3Example4cd">Doğum Tarihi</label>
                                         <input asp-for="BirthDate" id="form3Example4cd" class="form-control" />
                                         <span asp-validation-for="BirthDate" class="text-danger"></span>
                                     </div>
-                                </div>
+                                </div>*@
 
 
 
-                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                    <button type="submit" class="btn btn-primary btn-lg">Kayıt ol</button>
-                                </div>
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Kayıt Ol</button>
+                            </div>
 
-                            </form>
+                        </form>
 
-                        </div>
+                    </div>
                        <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
                             <img src="https://cdni.iconscout.com/illustration/premium/thumb/user-account-sign-up-4489360-3723267.png"
