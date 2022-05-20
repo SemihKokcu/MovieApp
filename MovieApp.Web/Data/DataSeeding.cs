@@ -79,27 +79,27 @@ namespace MovieApp.Web.Data
                                 Genres = new List<Genre>() {genres[1], genres[2] }
                             }
                         };
-            var users = new List<User>() {
-                new User() { Username="usera",Email="usera@gmail.com",Password="1234",},
-                new User() { Username="userb",Email="userb@gmail.com",Password="1234",},
-                new User() { Username="userc",Email="userc@gmail.com",Password="1234",},
-                new User() { Username="userb",Email="userb@gmail.com",Password="1234",}
-            };
-            var people = new List<Person>()
-            {
-                new Person()
-                {
-                    Name = "Personel 1",
-                    Biography = "tabıtım 1",
-                    User = users[0]
-                },
-                new Person()
-                {
-                    Name="Personel 2",
-                    Biography="tabıtım 2",
-                    User = users[1]
-                }
-            };
+            //var users = new List<User>() {
+            //    new User() { Username="usera",Email="usera@gmail.com",Password="1234",},
+            //    new User() { Username="userb",Email="userb@gmail.com",Password="1234",},
+            //    new User() { Username="userc",Email="userc@gmail.com",Password="1234",},
+            //    new User() { Username="userb",Email="userb@gmail.com",Password="1234",}
+            //};
+            //var people = new List<Person>()
+            //{
+            //    new Person()
+            //    {
+            //        Name = "Personel 1",
+            //        Biography = "tabıtım 1",
+            //        User = users[0]
+            //    },
+            //    new Person()
+            //    {
+            //        Name="Personel 2",
+            //        Biography="tabıtım 2",
+            //        User = users[1]
+            //    }
+            //};
             //var crews = new List<Crew>()
             //{ 
             //    new Crew() { Movie=movies[0], Person=people[0],Job="Yönetmen" },
@@ -123,10 +123,10 @@ namespace MovieApp.Web.Data
                     context.Movies.AddRange(movies);
                 }
 
-                if (context.Users.Count() == 0)
-                {
-                    context.Users.AddRange(users);
-                }
+                //if (context.Users.Count() == 0)
+                //{
+                //    context.Users.AddRange(users);
+                //}
 
                 //if (context.People.Count() == 0)
                 //{

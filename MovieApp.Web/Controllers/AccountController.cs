@@ -39,14 +39,8 @@ namespace MovieApp.Web.Controllers
                 //FirstOrDefault(a => a.Password == model.Password);
 
                 //return Redirect(returnUrl ?? "/");
-                var tempUser = _context.Users.FirstOrDefault(u => u.Username == model.UserName && u.Password == model.Password);
 
-                if (tempUser != null)
-                {
-                    return Redirect(returnUrl ?? "/");
-                }
-                ModelState.AddModelError("Email", "kullanıcı adı ya da şifre yanlış");
-                return View(model);
+               
             }
             
             
