@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Web.Data;
 using MovieApp.Web.Entity;
+using MovieApp.Web.Identity;
 using MovieApp.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -17,9 +19,11 @@ namespace MovieApp.Web.Controllers
     public class AdminController : Controller
     {
         private readonly MovieContext _context;
-        public AdminController(MovieContext context)
+        private UserManager<AppIdentityUser> _userManager;
+        public AdminController(MovieContext context, UserManager<AppIdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -266,6 +270,142 @@ namespace MovieApp.Web.Controllers
             ViewBag.Genres = _context.Genres.ToList();
             return View(model);
         }
+
+        public IActionResult UserList()
+        {
+            return View(_userManager.Users);
+        }
+
+        public IActionResult UserCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserCreate(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppIdentityUser user = new AppIdentityUser();
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("UserList");
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserDelete(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("UserList");
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "user not found");
+            }
+            return View("UserList", _userManager.Users);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateUser(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+
+            if (user != null)
+            {
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("UserList");
+            }
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateUser(string Id, string Password, string Email)
+        //{
+        //    var user = await _userManager.FindByIdAsync(Id);
+
+        //    if (user != null)
+        //    {
+        //        user.Email = Email;
+
+        //        IdentityResult validPass = null;
+
+        //        if (!string.IsNullOrEmpty(Password))
+        //        {
+        //            validPass = await passwordValidator.ValidateAsync(_userManager, user, Password);
+
+        //            if (validPass.Succeeded)
+        //            {
+        //                user.PasswordHash = passwordHasher.HashPassword(user, Password);
+        //            }
+        //            else
+        //            {
+        //                foreach (var item in validPass.Errors)
+        //                {
+        //                    ModelState.AddModelError("", item.Description);
+        //                }
+        //            }
+        //        }
+
+        //        if (validPass.Succeeded)
+        //        {
+        //            var result = await _userManager.UpdateAsync(user);
+
+        //            if (result.Succeeded)
+        //            {
+        //                return RedirectToAction("Index");
+        //            }
+        //            else
+        //            {
+        //                foreach (var item in result.Errors)
+        //                {
+        //                    ModelState.AddModelError("", item.Description);
+        //                }
+        //            }
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError("", "User Not Found");
+        //    }
+
+        //    return View(user);
+        //}
+
 
     }
 }
