@@ -18,6 +18,7 @@ namespace MovieApp.Web.Models.Account
         public string Password { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [Compare(nameof(Password))]
         public string RePassword { get; set; }
     }
 }

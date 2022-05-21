@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MovieApp.Web.Data;
 using MovieApp.Web.Entity;
 using MovieApp.Web.Identity;
+using MovieApp.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,16 @@ namespace MovieApp.Web
         {
             Configuration = configuration;
         }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
             services.AddDbContext<MovieContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
-            //services.ConfigureApplicationCookie(opt => opt.LoginPath = "Account/Login");
+
+           
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
 
@@ -36,7 +41,10 @@ namespace MovieApp.Web
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.Configure<IdentityOptions>(options => {
+            //services.ConfigureApplicationCookie(opt => opt.LoginPath = "Security/Login");
+
+            //services.Configure<IdentityOptions>(options =>
+            //{
             //    options.Password.RequireDigit = true;
             //    options.Password.RequireLowercase = true;
             //    options.Password.RequiredLength = 6;
@@ -53,27 +61,32 @@ namespace MovieApp.Web
             //    options.SignIn.RequireConfirmedPhoneNumber = false;
             //});
 
-            //services.ConfigureApplicationCookie(options => {
+            services.ConfigureApplicationCookie(options =>
+            {
 
-            //    options.LoginPath = "/Account/Login";
-            //    options.LogoutPath = "/Account/Logout";
-            //    options.AccessDeniedPath = "/Account/AccessDenied";
-            //    options.SlidingExpiration = true; // sistem yeniden girme kapalı
-            //    options.Cookie = new CookieBuilder
-            //    {
-            //        HttpOnly = true,
-            //        Name = ".AspNetCoreDemo.Access.Cookie",
-            //        Path = "/",
-            //        SameSite = SameSiteMode.Lax,
-            //        SecurePolicy = CookieSecurePolicy.SameAsRequest
-            //    };
+                options.LoginPath = "/Security/Login";
+                options.LogoutPath = "/Security/Logout";
+                options.AccessDeniedPath = "/Security/AccessDenied";
+                options.SlidingExpiration = true;
+            }); // sistem yeniden girme kapalı
+                                                  //    options.Cookie = new CookieBuilder
+                                                  //    {
+                                                  //        HttpOnly = true,
+                                                  //        Name = ".AspNetCoreDemo.Access.Cookie",
+                                                  //        Path = "/",
+                                                  //        SameSite = SameSiteMode.Lax,
+                                                  //        SecurePolicy = CookieSecurePolicy.SameAsRequest
+                                                  //    };
 
-                    
 
-            //});
 
-            services.AddControllersWithViews()
+                //});
+
+                services.AddControllersWithViews()
                 .AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled=true);
+
+            services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));
+        
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

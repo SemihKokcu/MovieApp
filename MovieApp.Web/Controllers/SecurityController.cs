@@ -24,9 +24,9 @@ namespace MovieApp.Web.Controllers
        
        
        
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login()
         {
-            ViewBag.returnUrl = returnUrl;
+            
 
             return View();
         }
@@ -105,6 +105,7 @@ namespace MovieApp.Web.Controllers
                 var callBackUrl = Url.Action("ConfirmEmail", "Security", new { userId = user.Id, code = confirmationCode.Result });
 
                 //Send Email
+                
 
                 return RedirectToAction("Index", "Home"); 
             }

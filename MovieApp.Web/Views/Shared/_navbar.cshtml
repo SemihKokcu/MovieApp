@@ -16,7 +16,19 @@
                 <li class="nav-item">
                     @if (User.Identity.IsAuthenticated)
                     {
-                         <a class="nav-link" href="/security/logout">Çıkış Yap</a>
+                    <div class="nav-link active">
+                        <div class="dropdown">
+                            <button class=" dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Profilim
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Hesabım</a></li>
+                                <li><a class="dropdown-item" href="#">İzleme Listem</a></li>
+                                <li><a class="dropdown-item" href="/security/logout">Çıkış Yap</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                               
                     }
                     else
                     {
