@@ -32,7 +32,7 @@
                 <td>
                     <form asp-route-id="@user.Id" asp-action="UserDelete" method="post">
                         <button type="submit" class="btn btn-danger">Delete</button>
-                        <a asp-action="Update" asp-route-id="@user.Id" class="btn btn-primary">Update</a>
+                        <a asp-action="UserUpdate" asp-route-id="@user.Id" class="btn btn-primary">Update</a>
                     </form>
                 </td>
             </tr>

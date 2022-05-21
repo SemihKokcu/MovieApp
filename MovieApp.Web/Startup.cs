@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MovieApp.Web.Data;
 using MovieApp.Web.Entity;
 using MovieApp.Web.Identity;
+using MovieApp.Web.Infrastructure;
 using MovieApp.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace MovieApp.Web
             //    options.SignIn.RequireConfirmedPhoneNumber = false;
             //});
 
+            services.AddTransient<IPasswordValidator<AppIdentityUser>, CustomPasswordValidator>();
             services.ConfigureApplicationCookie(options =>
             {
 

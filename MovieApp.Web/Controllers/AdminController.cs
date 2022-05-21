@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieApp.Web.Data;
 using MovieApp.Web.Entity;
 using MovieApp.Web.Identity;
+using MovieApp.Web.Infrastructure;
 using MovieApp.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,14 @@ namespace MovieApp.Web.Controllers
     {
         private readonly MovieContext _context;
         private UserManager<AppIdentityUser> _userManager;
-        public AdminController(MovieContext context, UserManager<AppIdentityUser> userManager)
+        private IPasswordValidator<AppIdentityUser> _passwordValidator;
+        private IPasswordHasher<AppIdentityUser> _passwordHasher;
+        public AdminController(MovieContext context, UserManager<AppIdentityUser> userManager, IPasswordValidator<AppIdentityUser> passwordValidator, IPasswordHasher<AppIdentityUser> passwordHasher)
         {
             _context = context;
             _userManager = userManager;
+            _passwordValidator = passwordValidator;
+            _passwordHasher = passwordHasher;
         }
         public IActionResult Index()
         {
@@ -338,7 +343,7 @@ namespace MovieApp.Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UpdateUser(string Id)
+        public async Task<IActionResult> UserUpdate(string Id)
         {
             var user = await _userManager.FindByIdAsync(Id);
 
@@ -352,59 +357,59 @@ namespace MovieApp.Web.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateUser(string Id, string Password, string Email)
-        //{
-        //    var user = await _userManager.FindByIdAsync(Id);
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser(string Id, string Password, string Email)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
 
-        //    if (user != null)
-        //    {
-        //        user.Email = Email;
+            if (user != null)
+            {
+                user.Email = Email;
 
-        //        IdentityResult validPass = null;
+                IdentityResult validPass = null;
 
-        //        if (!string.IsNullOrEmpty(Password))
-        //        {
-        //            validPass = await passwordValidator.ValidateAsync(_userManager, user, Password);
+                if (!string.IsNullOrEmpty(Password))
+                {
+                    validPass = await _passwordValidator.ValidateAsync(_userManager, user, Password);
 
-        //            if (validPass.Succeeded)
-        //            {
-        //                user.PasswordHash = passwordHasher.HashPassword(user, Password);
-        //            }
-        //            else
-        //            {
-        //                foreach (var item in validPass.Errors)
-        //                {
-        //                    ModelState.AddModelError("", item.Description);
-        //                }
-        //            }
-        //        }
+                    if (validPass.Succeeded)
+                    {
+                        user.PasswordHash = _passwordHasher.HashPassword(user, Password);
+                    }
+                    else
+                    {
+                        foreach (var item in validPass.Errors)
+                        {
+                            ModelState.AddModelError("", item.Description);
+                        }
+                    }
+                }
 
-        //        if (validPass.Succeeded)
-        //        {
-        //            var result = await _userManager.UpdateAsync(user);
+                if (validPass.Succeeded)
+                {
+                    var result = await _userManager.UpdateAsync(user);
 
-        //            if (result.Succeeded)
-        //            {
-        //                return RedirectToAction("Index");
-        //            }
-        //            else
-        //            {
-        //                foreach (var item in result.Errors)
-        //                {
-        //                    ModelState.AddModelError("", item.Description);
-        //                }
-        //            }
-        //        }
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("UserList");
+                    }
+                    else
+                    {
+                        foreach (var item in result.Errors)
+                        {
+                            ModelState.AddModelError("", item.Description);
+                        }
+                    }
+                }
 
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError("", "User Not Found");
-        //    }
+            }
+            else
+            {
+                ModelState.AddModelError("", "User Not Found");
+            }
 
-        //    return View(user);
-        //}
+            return View(user);
+        }
 
 
     }
