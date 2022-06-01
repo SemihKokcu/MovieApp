@@ -22,15 +22,10 @@ namespace MovieApp.Web.Controllers
             _signInManager = signInManager;
         }
        
-       
-       
         public IActionResult Login()
         {
-            
-
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Login(LogInModel model)
@@ -50,7 +45,7 @@ namespace MovieApp.Web.Controllers
                 }
 
             }
-                    // beni hatırla 3.paramere, locout durumu 4.parametere
+                    
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password,false,false);
 
             if (result.Succeeded)

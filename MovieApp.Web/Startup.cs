@@ -38,7 +38,7 @@ namespace MovieApp.Web
             services.AddDbContext<AppIdentityDbContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
 
-            services.AddIdentity<AppIdentityUser, AppIdentityRole>()
+            services.AddIdentity<AppIdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 

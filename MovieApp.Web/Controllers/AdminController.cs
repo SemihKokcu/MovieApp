@@ -16,19 +16,21 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="admin")]
     public class AdminController : Controller
     {
         private readonly MovieContext _context;
         private UserManager<AppIdentityUser> _userManager;
         private IPasswordValidator<AppIdentityUser> _passwordValidator;
         private IPasswordHasher<AppIdentityUser> _passwordHasher;
-        public AdminController(MovieContext context, UserManager<AppIdentityUser> userManager, IPasswordValidator<AppIdentityUser> passwordValidator, IPasswordHasher<AppIdentityUser> passwordHasher)
+        private RoleManager<IdentityRole> _roleManager;
+        public AdminController(MovieContext context, UserManager<AppIdentityUser> userManager, IPasswordValidator<AppIdentityUser> passwordValidator, IPasswordHasher<AppIdentityUser> passwordHasher, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _passwordValidator = passwordValidator;
             _passwordHasher = passwordHasher;
+            _roleManager = roleManager;
         }
         public IActionResult Index()
         {
@@ -411,6 +413,141 @@ namespace MovieApp.Web.Controllers
             return View(user);
         }
 
+        public IActionResult RoleList()
+        {
+            return View(_roleManager.Roles);
+        }
+
+        public IActionResult RoleCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoleCreate(string name)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _roleManager.CreateAsync(new IdentityRole(name));
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("RoleList");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("",error.Description);
+                    }
+                }
+               
+            }
+            
+            return View(name);
+        }
+
+        [HttpPost]
+        public async  Task<IActionResult> RoleDelete(string id)
+        { 
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role!=null)
+            {
+                var result = await _roleManager.DeleteAsync(role);
+                if (result.Succeeded)
+                {
+                    TempData["message"] = $"{role.Name} has been deleted";
+                    return RedirectToAction("RoleList");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+               
+            }
+
+            return RedirectToAction("RoleList");
+
+        }
+
+        public async Task<IActionResult> RoleEdit(string id)
+        {
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
+
+            var members = new List<AppIdentityUser>();
+            var nonmembers = new List<AppIdentityUser>();
+
+            foreach (var user in _userManager.Users.ToList())
+            {
+                
+                    var list = await _userManager.IsInRoleAsync(user, role.Name)
+                    ? members : nonmembers;
+                list.Add(user);
+            }
+
+            var model = new RoleDetails()
+            {
+                Role = role,
+                Members = members,
+                NonMembers = nonmembers
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleEdit(RoleEditModel model)
+        {
+            IdentityResult result;
+
+            if (ModelState.IsValid)
+            {
+                foreach (var userId in model.IdsToAdd ?? new string[] { })
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+
+                    if (user !=null)
+                    {
+                       result = await _userManager.AddToRoleAsync(user,model.RoleName);
+
+                        if (!result.Succeeded)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
+                    }
+                }
+
+                foreach (var userId in model.IdsToDelete ?? new string[]{ })
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+
+                    if (user != null)
+                    {
+                        result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
+
+                        if (!result.Succeeded)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("RoleList");
+            }
+            else
+            {
+                return RedirectToAction("RoleEdit", model.RoleId);
+            }
+        }
 
     }
 }
